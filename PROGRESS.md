@@ -101,3 +101,16 @@
   - `style.css` (Refined mobile header, admission banner, and responsive status pill rules)
   - `index.html` (Refined status pill markup)
   - `app.js` (Added title-priority sorting and mobile short status text)
+
+---
+
+### Step 8: GitHub Deployment & Version Control
+- **Status**: Completed
+- **What was done**:
+  - Initialized local Git repository on `main` branch.
+  - Created `.gitignore` ignoring temporary files and system artifacts.
+  - Linked remote `origin` to `https://github.com/varkiaaadi-bit/Swastik_Cafe.git`.
+  - Pushed all project files to GitHub (`main` branch).
+- **Files changed**:
+  - `.gitignore` (Created)
+  - `PROGRESS.md` (Updated)
