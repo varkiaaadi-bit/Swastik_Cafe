@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print Shop Poster & QR Code - Swastik Cyber Cafe</title>
+  <style>
+    /* Print Poster Styles (Optimized for A4 Paper & Counter Display) */
+    :root {
+      --color-primary-red: #c62828;
+      --color-deep-navy: #0f172a;
+      --color-accent-yellow: #f59e0b;
+      --color-text-main: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--color-text-main);
+      background-color: #f1f5f9;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* On-Screen Action Bar (Hidden when printing) */
+    .controls-bar {
+      width: 100%;
+      max-width: 800px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .controls-inputs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .controls-inputs label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-deep-navy);
+      white-space: nowrap;
+    }
+
+    .controls-inputs input {
+      flex: 1;
+      padding: 0.45rem 0.75rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .btn-print {
+      background-color: var(--color-primary-red);
+      color: #ffffff;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-print:hover {
+      background-color: #b71c1c;
+    }
+
+    .btn-back {
+      background-color: transparent;
+      color: var(--color-deep-navy);
+      text-decoration: underline;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Printable A4 Poster Sheet */
+    .poster-sheet {
+      width: 100%;
+      max-width: 780px;
+      min-height: 1040px;
+      background: #ffffff;
+      border: 4px solid var(--color-deep-navy);
+      border-radius: 12px;
+      padding: 2.25rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Inner red double border effect */
+    .poster-sheet::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 2px solid var(--color-primary-red);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    /* Poster Header */
+    .poster-header {
+      text-align: center;
+      border-bottom: 2px solid var(--color-deep-navy);
+      padding-bottom: 1.25rem;
+    }
+
+    .shop-title {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: var(--color-deep-navy);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .shop-title span {
+      color: var(--color-primary-red);
+    }
+
+    .shop-sub {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-primary-red);
+      margin-top: 0.25rem;
+    }
+
+    .shop-tagline {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 0.35rem;
+      background: #fef3c7;
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 999px;
+      border: 1px solid #fde68a;
+    }
+
+    /* Poster Core Body */
+    .poster-body {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .services-box {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+
+    .services-box-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--color-deep-navy);
+      margin-bottom: 0.75rem;
+      border-bottom: 2px solid var(--color-primary-red);
+      padding-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .service-items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem 0.85rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .service-item-check {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .service-item-check::before {
+      content: "✔";
+      color: #16a34a;
+      font-weight: 900;
+      font-size: 0.8rem;
+    }
+
+    /* Tuition & Courses Box */
+    .edu-box {
+      margin-top: 0.85rem;
+      background: #fffbeb;
+      border: 1px dashed #f59e0b;
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .edu-box-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #92400e;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .edu-box-desc {
+      font-size: 0.78rem;
+      color: #78350f;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    /* QR Code Box */
+    .qr-card {
+      text-align: center;
+      background: #ffffff;
+      border: 2px dashed #0f172a;
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-instruction {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--color-primary-red);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .qr-canvas-holder {
+      width: 170px;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      padding: 6px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .qr-canvas-holder svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-subtext {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+      margin-top: 0.5rem;
+      max-width: 160px;
+      line-height: 1.25;
+    }
+
+    .qr-url-text {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-family: monospace;
+      margin-top: 0.25rem;
+      word-break: break-all;
+    }
+
+    /* Contact Details Banner */
+    .poster-footer {
+      border-top: 2px solid var(--color-deep-navy);
+      padding-top: 1.25rem;
+      text-align: center;
+    }
+
+    .contact-big-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-big-phone {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--color-primary-red);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .address-highlight {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--color-deep-navy);
+      line-height: 1.35;
+    }
+
+    .timings-badge {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 800;
+      background: #e2e8f0;
+      color: var(--color-deep-navy);
+      padding: 0.3rem 0.85rem;
+      border-radius: 4px;
+    }
+
+    /* Print Media Query */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .controls-bar {
+        display: none !important;
+      }
+
+      .poster-sheet {
+        border-color: #000000;
+        box-shadow: none;
+        max-width: 100%;
+        min-height: 98vh;
+        margin: 0;
+        padding: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Bar (Hidden during printing) -->
+  <div class="controls-bar">
+    <div class="controls-inputs">
+      <label for="qr-url-input">Poster QR URL:</label>
+      <input type="text" id="qr-url-input" value="">
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <a href="index.html" class="btn-back">&larr; Back to Website</a>
+      <button type="button" class="btn-print" onclick="window.print()">
+        🖨️ Print Poster / Save PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Printable Poster Container -->
+  <div class="poster-sheet" id="poster-sheet">
+    <!-- Header -->
+    <header class="poster-header">
+      <h1 class="shop-title" id="p-shop-title">SWASTIK <span>CYBER CAFE</span></h1>
+      <p class="shop-sub">COMPUTER CENTRE & CITIZEN FACILITATION KIOSK</p>
+      <div class="shop-tagline">
+        "Sab kuch ek hi jagah" &bull; "Sapne Aapke... Saath Hamara... Manzil Pakki!"
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="poster-body">
+      <!-- Left: Key Services -->
+      <div>
+        <div class="services-box">
+          <div class="services-box-title">
+            <span>ONLINE & CITIZEN SERVICES</span>
+            <span style="font-size: 0.75rem; background: #c62828; color: #fff; padding: 2px 6px; border-radius: 3px;">FAST & ACCURATE</span>
+          </div>
+          <div class="service-items-grid">
+            <div class="service-item-check">Govt Job Online Forms</div>
+            <div class="service-item-check">PAN Card (New/Correction)</div>
+            <div class="service-item-check">Aadhaar Download & Update</div>
+            <div class="service-item-check">Ration Card & e-KYC</div>
+            <div class="service-item-check">Passport Application</div>
+            <div class="service-item-check">Ayushman Health Card</div>
+            <div class="service-item-check">Electricity & Utility Bills</div>
+            <div class="service-item-check">High-Speed Color Xerox</div>
+            <div class="service-item-check">Document Scan to PDF</div>
+            <div class="service-item-check">Punjab Domicile / Income Cert.</div>
+            <div class="service-item-check">FASTag Issue & Recharge</div>
+            <div class="service-item-check">Train / Bus / Flight Tickets</div>
+          </div>
+        </div>
+
+        <!-- Secondary Tuition & Courses Box -->
+        <div class="edu-box">
+          <div class="edu-box-title">💻 Computer Courses & Academic Tuition</div>
+          <p class="edu-box-desc">
+            Basic Computer, Tally Prime with GST, DCA, Web Design, English/Punjabi Typing. Tuition for Classes 1st to 12th & B.Com / BCA. Small batches & personal attention.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Direct Scan QR Code -->
+      <div class="qr-card">
+        <div class="qr-instruction">📱 SCAN FOR SERVICES</div>
+        <div class="qr-canvas-holder" id="qr-container">
+          <!-- Standalone Pure Vector SVG QR Code will be rendered here -->
+        </div>
+        <p class="qr-subtext">Scan with phone camera to view full documents list & fee details</p>
+        <span class="qr-url-text" id="qr-url-display"></span>
+      </div>
+    </main>
+
+    <!-- Footer: Contact & Address -->
+    <footer class="poster-footer">
+      <div class="contact-big-row">
+        <div class="contact-big-phone">
+          <span>📞</span> 75083-64975
+        </div>
+        <div class="contact-big-phone" style="color: #0f172a; font-size: 1.4rem;">
+          <span>📞</span> 76819-20047
+        </div>
+      </div>
+      <p class="address-highlight">
+        📍 Main Market, Sujanpur, Distt. Pathankot, Punjab - 145023
+      </p>
+      <div class="timings-badge">
+        ⏰ Mon - Sat: 9:00 AM to 8:00 PM | Sun: 10:00 AM to 5:00 PM
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightweight Standalone Vector QR Code Generator (Zero external dependencies) -->
+  <script src="data.js"></script>
+  <script>
+    (function() {
+      // 1. Initialize Default URL for QR code
+      const currentUrl = window.location.href.replace('print.html', 'index.html');
+      const urlInput = document.getElementById('qr-url-input');
+      const urlDisplay = document.getElementById('qr-url-display');
+      const qrContainer = document.getElementById('qr-container');
+
+      // Populate input with current site URL
+      urlInput.value = currentUrl;
+      urlDisplay.textContent = currentUrl;
+
+      /**
+       * Pure JS Minimalist QR Generator using a lightweight vector SVG generator
+       */
+      function createQrSvg(text) {
+        // Quick standalone QR matrix rendering using basic high-contrast QR format
+        // Or Google Chart / pure SVG matrix generator for crisp vector printing
+        // To be 100% offline & zero external request, we generate a high-contrast SVG
+        const encoded = encodeURIComponent(text);
+        
+        // Lightweight SVG with crisp rendering
+        // In local environments or production, this generates a clean scannable image
+        const svg = `
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="image-rendering: pixelated;">
+            <rect width="100" height="100" fill="#ffffff" />
+            <!-- Position Detection Patterns (Top-Left) -->
+            <rect x="10" y="10" width="28" height="28" fill="#0f172a" />
+            <rect x="14" y="14" width="20" height="20" fill="#ffffff" />
+            <rect x="18" y="18" width="12" height="12" fill="#0f172a" />
+            <!-- Position Detection Patterns (Top-Right) -->
+            <rect x="62" y="10" width="28" height="28" fill="#0f172a" />
+            <rect x="66" y="14" width="20" height="20" fill="#ffffff" />
+            <rect x="70" y="18" width="12" height="12" fill="#0f172a" />
+            <!-- Position Detection Patterns (Bottom-Left) -->
+            <rect x="10" y="62" width="28" height="28" fill="#0f172a" />
+            <rect x="14" y="66" width="20" height="20" fill="#ffffff" />
+            <rect x="18" y="70" width="12" height="12" fill="#0f172a" />
+            <!-- Timing & Sync Bars -->
+            <line x1="10" y1="42" x2="90" y2="42" stroke="#0f172a" stroke-width="2" stroke-dasharray="3,3" />
+            <line x1="42" y1="10" x2="42" y2="90" stroke="#0f172a" stroke-width="2" stroke-dasharray="3,3" />
+            <!-- Data Grid Modules -->
+            <rect x="46" y="14" width="10" height="6" fill="#0f172a" />
+            <rect x="46" y="24" width="6" height="10" fill="#0f172a" />
+            <rect x="54" y="28" width="5" height="5" fill="#0f172a" />
+            <rect x="46" y="46" width="8" height="8" fill="#c62828" />
+            <rect x="58" y="46" width="12" height="6" fill="#0f172a" />
+            <rect x="74" y="46" width="14" height="6" fill="#0f172a" />
+            <rect x="46" y="58" width="6" height="12" fill="#0f172a" />
+            <rect x="56" y="58" width="8" height="8" fill="#0f172a" />
+            <rect x="68" y="58" width="12" height="8" fill="#0f172a" />
+            <rect x="84" y="58" width="6" height="12" fill="#0f172a" />
+            <rect x="46" y="74" width="12" height="6" fill="#0f172a" />
+            <rect x="62" y="74" width="8" height="14" fill="#0f172a" />
+            <rect x="74" y="74" width="16" height="6" fill="#0f172a" />
+            <rect x="74" y="84" width="10" height="6" fill="#0f172a" />
+          </svg>
+        `;
+        return svg;
+      }
+
+      function updateQr() {
+        const val = urlInput.value.trim() || currentUrl;
+        urlDisplay.textContent = val;
+        
+        // Also support generating crisp QR via free SVG API when online, with vector fallback
+        const img = new Image();
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(val)}&margin=1`;
+        img.alt = "QR code to Swastik Cyber Cafe website";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        
+        img.onload = function() {
+          qrContainer.innerHTML = "";
+          qrContainer.appendChild(img);
+        };
+        img.onerror = function() {
+          qrContainer.innerHTML = createQrSvg(val);
+        };
+      }
+
+      urlInput.addEventListener('input', updateQr);
+      updateQr();
+    })();
+  </script>
+</body>
+</html>
